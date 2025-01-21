@@ -3,8 +3,9 @@
 # This is a primitive version I use to compile GCC for the Postgres buildfarm
 # Good chances you'd need to modify this, to suit your needs.
 
-# The script compile in a staging folder and then (1) once successful and 
-# (2) when stars align, we swap out the folder (quicker and hopefully atomic)
+# On a few conditions (1) The script compile `gcc` successfully and
+# (2) when concurrent usage is not found, we swap out the recently built
+# gcc binary folder with the one in use.
 
 # Here we set defaults for all environments, and...
 gccbasedir="/opt/gcc"

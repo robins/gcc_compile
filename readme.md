@@ -1,31 +1,35 @@
-This script helps maintain an upto date gcc binary, trying to cause minimal disruption to on-going compilations that may be using gcc. This file has some helpful steps / samples.
+This script helps to maintain an upto date `gcc` binary, while trying to cause minimal disruption to on-going compilations that may be using gcc. (At this point, it only looks for postgres buildfarm compilations, but you can add your own checks too). 
+
+This `README` file has some helpful steps / samples towards achieving that.
 
 Install GCC (once)
 ------------------
-git clone https://github.com/gcc-mirror/gcc.git
-  If that fails (bad network could do that)
-  git clone git://gcc.gnu.org/git/gcc.git
+- `git clone https://github.com/gcc-mirror/gcc.git`
+- If that fails (bad network could do that), sometimes cloning from gcc-mirror worked for me.
+  - `git clone git://gcc.gnu.org/git/gcc.git`
 
 Requirements - Compulsory
 -------------------------
-sudo apt install libmpfr-dev
-sudo apt install libmpc-dev
+- `sudo apt install libmpfr-dev`
+- `sudo apt install libmpc-dev`
 
 
 Prequired - Optional
 --------------------
-sudo apt install libgcc-13-dev
-sudo apt install texinfo
-sudo apt install m4
-sudo apt install expect
-sudo apt install runtest
-sudo apt install python3-pip
-pip install runtest
+- `sudo apt install libgcc-13-dev`
+- `sudo apt install texinfo`
+- `sudo apt install m4`
+- `sudo apt install expect`
+- `sudo apt install runtest`
+- `sudo apt install python3-pip`
+- `pip install runtest`
 
 
+----
 
 Sample Log - No-Op
 ------------------
+Log from a simple run, where the script checked and didn't fine any updates to the `gcc` git repository.
 ```
 gcsfda9 20250121_1930 - git checkout successful.
 gcsfda9 20250121_1930 - git pull successful.
@@ -33,6 +37,7 @@ gcsfda9 20250121_1930 - No change in gcc version. Quitting.
 ```
 Sample Log - Rebuild - Quick Run
 --------------------
+Log from a run, where script found recent updates to git, and the compilation was quick (i.e. finished in ~1 min).
 ```
 gcsd95e 20250121_1945 - git checkout successful.
 gcsd95e 20250121_1945 - git pull successful.
@@ -45,6 +50,7 @@ gcsd95e 20250121_1946 - gcc version string has changed from [15.0.1 20250121 (ex
 
 Sample Log - Rebuild worked, but waited for buildfarm runs to complete
 ---------------------------
+Log from a run, where the script compiled `gcc` successfully but had to wait for concurrent postgres buildfarm process to finish, before swapping out the binaries.
 ```
 gcs0b69 20250121_0830 - git checkout successful.
 gcs0b69 20250121_0830 - git pull successful.
@@ -62,6 +68,7 @@ gcs78d5 20250121_0845 - High CPU 1-min ratio (12). Aborting.
 
 Sample Log - Rebuild worked, but took hours
 -------------------------------------------
+Log from a run, where git updates were found, but the `gcc` compilation took hours.
 ```
 gcs2215 20250120_1100 - git checkout successful.
 gcs2215 20250120_1100 - git pull successful.
@@ -74,6 +81,7 @@ gcs2215 20250120_1300 - gcc version string has changed from [15.0.1 20250119 (ex
 
 Sample Log - Rebuild failed, but fresh configure / make worked
 --------------------------------------------------------------
+Log from a run, where the first compilation attempt failed, but a fresh compilation effort succeeded.
 ```
 gcsdea1 20241009_2300 - git checkout successful.
 gcsdea1 20241009_2300 - git pull successful.
