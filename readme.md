@@ -63,7 +63,6 @@ gcs0b69 20250121_0831 - Postgres Buildfarm process running (2)
 gcs0b69 20250121_0832 - Postgres Buildfarm process running (2)
 gcs0b69 20250121_0832 - Postgres Buildfarm process not running (0). Good.
 gcs0b69 20250121_0832 - gcc version string has changed from [15.0.1 20250120 (experimental) - 5cd4605141b] to [15.0.1 20250120 (experimental) - 64a162d5562]
-gcs78d5 20250121_0845 - High CPU 1-min ratio (12). Aborting.
 ```
 
 Sample Log - Rebuild worked, but took hours
