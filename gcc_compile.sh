@@ -224,7 +224,7 @@ if [ "$gcc_commit_old" != "$gcc_commit_new" ]; then
     # /media/pi/250gb/proj/bf/v17/update_personality.pl --config=/media/pi/250gb/proj/bf/v17/build-farm.conf.extensive --compiler-version="${bf_gcc_version_new}" && decho "Update buildfarm personality successful."    || { decho "Unable to update buildfarm personality. Quitting.";  wrap_up_before_exit; exit 1; }
 
 else
-    decho "No change in gcc version. Quitting."
+    decho "No change in gcc version (${gcc_commit_new}). Quitting."
 fi
 
 wrap_up_before_exit
