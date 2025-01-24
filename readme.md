@@ -91,3 +91,18 @@ gcsdea1 20241010_0153 - make distclean + make successful
 gcsdea1 20241010_0153 - make install successful.
 gcsdea1 20241010_0153 - gcc version string has changed from [15.0.0 20241009 (experimental) - 41179a32768] to [15.0.0 20241009 (experimental) - cf08dd297ca]
 ```
+
+Sample Log - Skip if the instance is already over-burdened
+----------------------------------------------------------
+Log from a run (between two No-Op runs), where the script immediately bailed, when CPU was very high.
+```
+gcs5b0d 20250124_0400 - git checkout successful.
+gcs5b0d 20250124_0400 - git pull successful.
+gcs5b0d 20250124_0400 - No change in gcc version. Quitting.
+
+gcs1750 20250124_0415 - High CPU 1-min ratio (14). Aborting.
+
+gcsa97a 20250124_0430 - git checkout successful.
+gcsa97a 20250124_0430 - git pull successful.
+gcsa97a 20250124_0430 - No change in gcc version. Quitting.
+```
