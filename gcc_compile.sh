@@ -33,10 +33,6 @@ proddir="${gccbasedir}/prod"
 buildlog=${gccbasedir}/build.log
 compilelog=${gccbasedir}/compile.log
 
-# Ensure all directories exist, or bail
-mkdir -pv ${objdir} || { decho "Unable to ensure $objdir exists. Quitting."; wrap_up_before_exit; exit 1; }
-mkdir -pv ${tgtdir} || { decho "Unable to ensure $tgtdir exists. Quitting."; wrap_up_before_exit; exit 1; }
-
 # We try to wrap up to the same directory, where we started from
 startdir=`pwd`
 
@@ -50,6 +46,18 @@ decho () {
     echo "${thiscommand}${hash} ${t} - ${line}" | tee -a ${buildlog}
   done <<< "$1"
 }
+
+# Ensure all directories exist, or bail
+mkdir -pv ${objdir} || { decho "Unable to ensure $objdir exists. Quitting."; wrap_up_before_exit; exit 1; }
+mkdir -pv ${tgtdir} || { decho "Unable to ensure $tgtdir exists. Quitting."; wrap_up_before_exit; exit 1; }
+mkdir -pv ${proddir} || { decho "Unable to ensure $proddir exists. Quitting."; wrap_up_before_exit; exit 1; }
+
+if [ ! -d ${srcdir} ]; then
+  decho "Source folder doesn't exist"
+  mkdir -pv ${srcdir} || { decho "Unable to ensure $srcdir exists. Quitting."; wrap_up_before_exit; exit 1; }
+  git clone https://github.com/gcc-mirror/gcc.git || { decho "Unable to do git clone. Quitting."; wrap_up_before_exit; exit 1; }
+fi
+
 
 get_gcc_version() {
   echo `${proddir}/bin/gcc --version | head -1 | awk '{print $3 " " $4 " " $5}'`
