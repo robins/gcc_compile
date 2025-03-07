@@ -32,6 +32,7 @@ proddir="${gccbasedir}/prod"
 
 buildlog=${gccbasedir}/build.log
 compilelog=${gccbasedir}/compile.log
+compilelog_prev=${gccbasedir}/compile_prev.log
 
 # We try to wrap up to the same directory, where we started from
 startdir=`pwd`
@@ -165,6 +166,9 @@ wait_till_buildfarm_processes_quit() {
 
 ## OK. All checks are good. Now start building GCC
 ## ===============================================
+
+#Keep a backup of compile.log
+[ -f $compilelog ] && mv -vf $compilelog $compilelog_prev
 
 # Not using decho, since we don't need timestamp for a blank line
 echo >> ${buildlog}
