@@ -47,6 +47,20 @@ decho () {
   done <<< "$1"
 }
 
+
+reset_git_commit() {
+  # revert git commit to what we found when starting
+  if [ "${gcc_commit_new}" != "${gcc_commit_revert_to_before_exit}" ]; then
+    cd ${srcdir}
+    git checkout ${gcc_commit_revert_to_before_exit} && decho "git switched back to $gcc_commit_revert_to_before_exit."    || decho "### Unable to switch git back ###."
+  fi
+}
+
+wrap_up_before_exit() {
+  reset_git_commit
+  cd $startdir
+}
+
 # Ensure all directories exist, or bail
 mkdir -pv ${objdir} || { decho "Unable to ensure $objdir exists. Quitting."; wrap_up_before_exit; exit 1; }
 mkdir -pv ${tgtdir} || { decho "Unable to ensure $tgtdir exists. Quitting."; wrap_up_before_exit; exit 1; }
@@ -107,19 +121,6 @@ recompile_if_so_recommended() {
   # fi
 
   return $r
-}
-
-reset_git_commit() {
-  # revert git commit to what we found when starting
-  if [ "${gcc_commit_new}" != "${gcc_commit_revert_to_before_exit}" ]; then
-    cd ${srcdir}
-    git checkout ${gcc_commit_revert_to_before_exit} && decho "git switched back to $gcc_commit_revert_to_before_exit."    || decho "### Unable to switch git back ###."
-  fi
-}
-
-wrap_up_before_exit() {
-  reset_git_commit
-  cd $startdir
 }
 
 

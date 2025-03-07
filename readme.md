@@ -8,20 +8,19 @@ Install GCC (once)
 - If that fails (bad network could do that), sometimes cloning from gcc-mirror worked for me.
   - `git clone git://gcc.gnu.org/git/gcc.git`
 
-Requirements - Compulsory
+Prerequisites - Compulsory
 -------------------------
-- `sudo apt install libmpfr-dev`
-- `sudo apt install libmpc-dev`
+- `sudo apt install libmpfr-dev`   or `sudo yum install mpfr-devel`
+- `sudo apt install libmpc-dev`    or `sudo yum install libmpf-devel`
 
 
-Prequired - Optional
+Prerequisites - Optional
 --------------------
 - `sudo apt install libgcc-13-dev`
-- `sudo apt install texinfo`
-- `sudo apt install m4`
-- `sudo apt install expect`
-- `sudo apt install runtest`
-- `sudo apt install python3-pip`
+- `sudo apt install texinfo`       or `sudo yum install texinfo`
+- `sudo apt install m4`            or `sudo yum install m4`
+- `sudo apt install expect`        or `sudo yum install expect`
+- `sudo apt install python3-pip`   or `sudo yum install python3-pip`
 - `pip install runtest`
 
 
