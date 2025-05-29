@@ -66,13 +66,19 @@ wrap_up_before_exit() {
 mkdir -pv ${objdir} || { decho "Unable to ensure $objdir exists. Quitting."; wrap_up_before_exit; exit 1; }
 mkdir -pv ${tgtdir} || { decho "Unable to ensure $tgtdir exists. Quitting."; wrap_up_before_exit; exit 1; }
 mkdir -pv ${proddir} || { decho "Unable to ensure $proddir exists. Quitting."; wrap_up_before_exit; exit 1; }
+mkdir -pv ${proddir}/bin || { decho "Unable to ensure ${proddir}/bin exists. Quitting."; wrap_up_before_exit; exit 1; }
 
 if [ ! -d ${srcdir} ]; then
   decho "Source folder doesn't exist"
   mkdir -pv ${srcdir} || { decho "Unable to ensure $srcdir exists. Quitting."; wrap_up_before_exit; exit 1; }
   git clone https://github.com/gcc-mirror/gcc.git || { decho "Unable to do git clone. Quitting."; wrap_up_before_exit; exit 1; }
-fi
 
+  # Good chances, gcc binary doesn't exist either.
+  if [ ! -f ${proddir}/bin/gcc ]; then
+    decho "GCC binary doesn't exist. Putting a placeholder for first run."
+    ln -s /usr/bin/gcc ${proddir}/bin/gcc || { decho "Unable to create placeholder for gcc binary. Quitting."; wrap_up_before_exit; exit 1; }
+  fi
+fi
 
 get_gcc_version() {
   echo `${proddir}/bin/gcc --version | head -1 | awk '{print $3 " " $4 " " $5}'`
