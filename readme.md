@@ -10,19 +10,21 @@ Install GCC (once)
 
 Prerequisites - Compulsory
 -------------------------
-Installation command (Debian based): `sudo apt install libmpfr-dev libmpc-dev`
+- Installation command (Debian based): `sudo apt install libmpfr-dev libmpc-dev`
+
 OR
-Installation command (CentOS based): `sudo yum install mpfr-devel libmpf-devel`
+- Installation command (CentOS based): `sudo yum install mpfr-devel libmpf-devel`
 
 
 Prerequisites - Optional
 ------------------------
 
-Installation command (Debian based): `sudo apt install libgcc-13-dev texinfo m4 expect python3-pip`
-OR
-Installation command (CentOS based): `sudo yum install texinfo m4 expect python3-pip`
+- Installation command (Debian based): `sudo apt install libgcc-13-dev texinfo m4 expect python3-pip`
 
-`runtest` would be good too (for which you may need `python3-pip` first - `sudo apt install python3-pip runtest` or `sudo yum install python3-pip runtest` )
+OR
+- Installation command (CentOS based): `sudo yum install texinfo m4 expect python3-pip`
+
+Also, runtest would be good to have - `pip install runtest`
 
 ----
 
