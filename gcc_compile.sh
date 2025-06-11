@@ -10,10 +10,18 @@
 # Here we set defaults for all environments, and...
 gccbasedir="/opt/gcc"
 
-# Trying to use all available CPUs, and then one.
-vcpu=$(( `nproc`+1 ))
+# Guesstimating a good concurrency level based on CPUs
+if [[ `nproc` -le 4 ]]; then
+  # If less than 4 CPUs, this could be a low-end machine, or a VM.
+  # Don't hog all the CPUs, leave some for other processes. Also, 
+  # this ensures that we can run the script on a single core machine.
+  vcpu=$(( `nproc`/2 +1 ))
+else
+  # If we have ample CPU, good chances the IO's good too - hammer it :) 
+  vcpu=$(( `nproc`+1 ))
+fi
 
-# # ... and then, we override those defaults if required, for a specific environemnt
+# ... and then, we override those defaults if required, for a specific environemnt
 # update_dirs_if_pi() {
 #   unm=`uname -a`
 #   if [[ "${unm,,}" == *"pi4"* ]]; then
