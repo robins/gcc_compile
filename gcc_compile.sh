@@ -48,6 +48,8 @@ decho () {
   done <<< "$1"
 }
 
+# Bail out, if the script is already running
+pidof -o %PPID -x $0 >/dev/null && decho "Looks like a previous run of script '$0' is still active. Aborting." && exit 1
 
 reset_git_commit() {
   # revert git commit to what we found when starting
@@ -134,7 +136,7 @@ recompile_if_so_recommended() {
 ## Doing basic pre-checks before we begin
 ## ======================================
 
-pidof -o %PPID -x $0 >/dev/null && echo "Looks like a previous run of script '$0' is still active. Aborting." && exit 1
+pidof -o %PPID -x $0 >/dev/null && echo "Looks like a previous run of script '$0' is still active. XXX: We should have aborted earlier? Aborting." && exit 1
 # # Abort, if a previous run is still running
 # s="prev-gcc"
 # n=`ps -ef | grep "$s" | grep -v grep | wc -l`
