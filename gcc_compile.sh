@@ -18,7 +18,7 @@ if [[ `nproc` -le 4 ]]; then
   vcpu=$(( `nproc`/2 +1 ))
 else
   # If we have ample CPU, good chances the IO's good too - hammer it :) 
-  vcpu=$(( `nproc`+1 ))
+  vcpu=$(( `nproc`*1.25 ))
 fi
 
 # ... and then, we override those defaults if required, for a specific environemnt
@@ -111,12 +111,20 @@ recompile_if_so_recommended() {
     # configure: error: run `make distclean' and/or `rm ./config.cache' and start over
     # decho "make distclean / rm config.cache recommended. Retrying"
 
-    make distclean && decho "make distclean successful" || decho "make distclean unsuccessful"
+    #We used to make distclean, but that just returns with "No rule to make distclean" error.
+    #make distclean && decho "make distclean successful" || decho "make distclean unsuccessful"
+
     find ${objdir} -type f -name config.cache | grep objdir | xargs -P1 -i rm -v {}
 
     #confflags="--disable-gcov --disable-bootstrap --disable-nls --disable-lto --disable-multilib --prefix=${tgtdir}"
-    confflags="--prefix=${tgtdir} --disable-multilib"
-    ${srcdir}/configure ${confflags} &>> $compilelog 
+    #confflags="--prefix=${tgtdir} --disable-multilib"
+
+    CFLAGS="-O2 -pipe -march=native"
+    CXXFLAGS="-O2 -pipe -march=native"
+    confflags="--prefix=${tgtdir} --disable-multilib --disable-bootstrap --enable-checking=release --with-system-zlib --enable-languages=c,c++"
+
+    CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}" ${srcdir}/configure ${confflags} &>> $compilelog
+
     r="$?" 
     if [ "$r" -eq "0" ]; then
       decho "configure successful."
@@ -124,7 +132,7 @@ recompile_if_so_recommended() {
       decho "configure unsuccessful."
       return $r
     fi
-    make -j${vcpu} &>> $compilelog 
+    nice -n 20 make -j${vcpu} &>> $compilelog 
     r="$?" 
     if [ "$r" -eq "0" ]; then
       decho "make (retry) successful"
@@ -236,7 +244,7 @@ if [ "$gcc_commit_old" != "$gcc_commit_new" ]; then
     fi
 
     # This install everything to a temporary location (tgtdir) - before swapping out to prod binaries.
-    make install                       && decho "make install successful."    || { decho "Unable to make install. Quitting."; reset_git_commit; exit 1; }
+    nice -n 20 make install                       && decho "make install successful."    || { decho "Unable to make install. Quitting."; reset_git_commit; exit 1; }
 
     wait_till_buildfarm_processes_quit
 
