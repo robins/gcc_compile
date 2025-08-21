@@ -78,10 +78,17 @@ mkdir -pv ${tgtdir} || { decho "Unable to ensure $tgtdir exists. Quitting."; wra
 mkdir -pv ${proddir} || { decho "Unable to ensure $proddir exists. Quitting."; wrap_up_before_exit; exit 1; }
 mkdir -pv ${proddir}/bin || { decho "Unable to ensure ${proddir}/bin exists. Quitting."; wrap_up_before_exit; exit 1; }
 
+
+# Ensure srcdir exists
 if [ ! -d ${srcdir} ]; then
   decho "Source folder doesn't exist"
   mkdir -pv ${srcdir} || { decho "Unable to ensure $srcdir exists. Quitting."; wrap_up_before_exit; exit 1; }
-  git clone https://github.com/gcc-mirror/gcc.git --verbose || { decho "Unable to do git clone. Quitting."; wrap_up_before_exit; exit 1; }
+fi
+# Check if srcdir is a valid git repository using git status
+git -C "${srcdir}" status > /dev/null 2>&1
+if [ $? -ne 0 ]; then
+  decho "Source folder exists but is not a valid git repository. Cloning..."
+  git clone https://github.com/gcc-mirror/gcc.git --verbose ${srcdir} || { decho "Unable to do git clone. Quitting."; wrap_up_before_exit; exit 1; }
 
   # Good chances, gcc binary doesn't exist either.
   if [ ! -f ${proddir}/bin/gcc ]; then
