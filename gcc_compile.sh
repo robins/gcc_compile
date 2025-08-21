@@ -18,7 +18,7 @@ if [[ `nproc` -le 4 ]]; then
   vcpu=$(( `nproc`/2 +1 ))
 else
   # If we have ample CPU, good chances the IO's good too - hammer it :) 
-  vcpu=$(( `nproc`*1.25 ))
+  vcpu=$(echo "scale=0; `nproc`*1.25/1"| bc)
 fi
 
 # ... and then, we override those defaults if required, for a specific environemnt
@@ -81,7 +81,7 @@ mkdir -pv ${proddir}/bin || { decho "Unable to ensure ${proddir}/bin exists. Qui
 if [ ! -d ${srcdir} ]; then
   decho "Source folder doesn't exist"
   mkdir -pv ${srcdir} || { decho "Unable to ensure $srcdir exists. Quitting."; wrap_up_before_exit; exit 1; }
-  git clone https://github.com/gcc-mirror/gcc.git || { decho "Unable to do git clone. Quitting."; wrap_up_before_exit; exit 1; }
+  git clone https://github.com/gcc-mirror/gcc.git --verbose || { decho "Unable to do git clone. Quitting."; wrap_up_before_exit; exit 1; }
 
   # Good chances, gcc binary doesn't exist either.
   if [ ! -f ${proddir}/bin/gcc ]; then
