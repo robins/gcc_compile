@@ -171,6 +171,9 @@ pidof -o %PPID -x $0 >/dev/null && echo "Looks like a previous run of script '$0
 #   echo "" > ${compilelog}
 # fi
 
+# Not using decho, since we don't need timestamp for a blank line
+echo >> ${buildlog}
+
 # Abort recompiling GCC, if the system is already under stress
 loadavg=$(echo "scale=0; `cat /proc/loadavg | awk '{print $1}' `/1"| bc)
 if [ "$loadavg" -gt `nproc` ]; then
@@ -200,9 +203,6 @@ wait_till_buildfarm_processes_quit() {
 
 #Keep a backup of compile.log
 [ -f $compilelog ] && mv -vf $compilelog $compilelog_prev
-
-# Not using decho, since we don't need timestamp for a blank line
-echo >> ${buildlog}
 
 cd $srcdir
 
