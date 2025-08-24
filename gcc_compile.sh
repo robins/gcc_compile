@@ -128,7 +128,16 @@ recompile_if_so_recommended() {
 
     CFLAGS="-O2 -pipe -march=native"
     CXXFLAGS="-O2 -pipe -march=native"
-    confflags="--prefix=${tgtdir} --disable-multilib --disable-bootstrap --enable-checking=release --with-system-zlib --enable-languages=c,c++"
+
+    # Check if the current machine is RISC-V 64-bit
+    machine_arch=$(uname -m)
+    if [[ "$machine_arch" == "riscv64" ]]; then
+      # RISC-V specific configuration
+      confflags="--prefix=${tgtdir} --disable-multilib --disable-bootstrap --enable-checking=release --with-system-zlib --enable-languages=c,c++ --with-arch=rv64imafdcv_zicbom_zicboz_zicntr_zicond_zicsr_zifencei_zihintpause_zihpm_zfh_zfhmin_zca_zcd_zba_zbb_zbc_zbs_zkt_zve32f_zve32x_zve64d_zve64f_zve64x_zvfh_zvfhmin_zvkt_sscofpmf_sstc_svinval_svnapot_svpbmt --with-abi=lp64d --with-tune=ky.x60"
+    else
+      # Default configuration
+      confflags="--prefix=${tgtdir} --disable-multilib --disable-bootstrap --enable-checking=release --with-system-zlib --enable-languages=c,c++"
+    fi
 
     CFLAGS="${CFLAGS}" CXXFLAGS="${CXXFLAGS}" ${srcdir}/configure ${confflags} &>> $compilelog
 
