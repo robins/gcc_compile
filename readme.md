@@ -1,13 +1,4 @@
 This script helps to maintain an upto date `gcc` binary, while trying to cause minimal disruption to on-going compilations that may be using gcc. (At this point, it only looks for postgres buildfarm compilations, but you can add your own checks too). 
-
-This `README` file has some helpful steps / samples towards achieving that.
-
-Install GCC (once)
-------------------
-- `git clone https://github.com/gcc-mirror/gcc.git`
-- If that fails (bad network could do that), sometimes cloning from gcc-mirror worked for me.
-  - `git clone git://gcc.gnu.org/git/gcc.git`
-
 Prerequisites - Compulsory
 -------------------------
 - Installation command (Debian based): `sudo apt install libmpfr-dev libmpc-dev`
@@ -25,6 +16,11 @@ OR
 - Installation command (CentOS based): `sudo yum install texinfo m4 expect python3-pip`
 
 Also, runtest would be good to have - `pip install runtest`
+
+Architecture Support
+--------------------
+The script includes specific optimizations and configuration flags for **RISC-V 64-bit** (`riscv64`) architectures. It automatically detects the architecture and applies the appropriate flags.
+
 
 ----
 
