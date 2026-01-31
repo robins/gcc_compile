@@ -1,4 +1,6 @@
+
 This script helps to maintain an upto date `gcc` binary, while trying to cause minimal disruption to on-going compilations that may be using gcc. (At this point, it only looks for postgres buildfarm compilations, but you can add your own checks too). 
+
 Prerequisites - Compulsory
 -------------------------
 - Installation command (Debian based): `sudo apt install libmpfr-dev libmpc-dev`
@@ -103,3 +105,9 @@ gcsa97a 20250124_0430 - git checkout successful.
 gcsa97a 20250124_0430 - git pull successful.
 gcsa97a 20250124_0430 - No change in gcc version. Quitting.
 ```
+
+Sample Crontab entry
+--------------------
+postgres@mac:~/proj/gcc_compile$ crontab -l | grep -v ^#
+
+0 * * * * /home/postgres/proj/gcc_compile/gcc_compile.sh
