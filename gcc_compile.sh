@@ -215,7 +215,7 @@ wait_till_buildfarm_processes_quit() {
 
 cd $srcdir
 
-git_commit_provided=$1
+branch=${1:-releases/gcc-15}
 gcc_version_old=`get_gcc_version`
 gcc_commit_old=`git rev-parse --short HEAD`
 gcc_commit_revert_to_before_exit=$gcc_commit_old
@@ -223,11 +223,10 @@ gcc_commit_revert_to_before_exit=$gcc_commit_old
 bf_gcc_version_old="${gcc_version_old} - ${gcc_commit_old}"
 
 # This is a local git operation
-git checkout master                              && decho "git checkout successful."    || { decho "Unable to checkout git. Is repository in place? Quitting." ; wrap_up_before_exit; exit 1; }
+git checkout $branch                              && decho "git checkout [$branch] successful."    || { decho "Unable to checkout git. Is repository in place? Quitting." ; wrap_up_before_exit; exit 1; }
 
-if [[ $git_commit_provided != "" ]]; then
-  git checkout $git_commit_provided               && decho "git checkout successful."    || { decho "Unable to checkout commit provided. Is it a valid commit id? Quitting." ; wrap_up_before_exit; exit 1; }
-else
+# If we are on a branch (not detached HEAD), pull the latest
+if git symbolic-ref -q HEAD > /dev/null; then
   # This (on the other hand), is a network operation
   git pull                                        && decho "git pull successful."        || { decho "Unable to git pull. Are we connected? Quitting." ; wrap_up_before_exit; exit 1; }
 fi
