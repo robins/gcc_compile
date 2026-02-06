@@ -1,6 +1,16 @@
 
 This script helps to maintain an upto date `gcc` binary, while trying to cause minimal disruption to on-going compilations that may be using gcc. (At this point, it only looks for postgres buildfarm compilations, but you can add your own checks too). 
 
+Usage
+-----
+The script can be run with an optional argument to specify the target git branch or commit hash.
+
+`./gcc_compile.sh [branch_or_commit]`
+
+- **Default**: If no argument is provided, it defaults to `releases/gcc-15`.
+- **Updates**: If a branch name is provided (or used by default), the script will attempt to `git pull` the latest changes before compiling.
+- **Specific Commit**: If a specific commit hash is provided, the script will check it out (detached HEAD) and compile it as-is without pulling. 
+
 Prerequisites - Compulsory
 -------------------------
 - Installation command (Debian based): `sudo apt install libmpfr-dev libmpc-dev`
